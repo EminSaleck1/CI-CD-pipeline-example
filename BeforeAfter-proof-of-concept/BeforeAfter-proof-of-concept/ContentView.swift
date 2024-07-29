@@ -10,6 +10,7 @@ struct ContentView: View {
     let rows = [
         GridItem(.fixed(150))
     ]
+    
     var body: some View {
         ZStack {
                 VStack {
