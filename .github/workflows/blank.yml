@@ -82,7 +82,7 @@ jobs:
       - name: Upload to App Center
         uses: wzieba/AppCenter-Github-Action@v1
         with:
-          appName: ${{ secrets.APPCENTER_APP_NAME }}
+          appName: VideoAI
           token: ${{ secrets.APPCENTER_API_TOKEN }}
           group: Collaborators
           file: BeforeAfter-proof-of-concept.ipa
