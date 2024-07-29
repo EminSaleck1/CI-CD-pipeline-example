@@ -51,7 +51,7 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
-          name: BUILD
+          - name: BUILD
           run:
           xcodebuild -scheme "BeforeAfter-proof-of-concept" clean archive -archivePath "Actions" -configuration "Debug"
 
