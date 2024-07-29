@@ -74,12 +74,21 @@ jobs:
           xcodebuild clean archive -project BeforeAfter-proof-of-concept/BeforeAfter-proof-of-concept.xcodeproj -scheme "BeforeAfter-proof-of-concept" -archivePath $RUNNER_TEMP/BeforeAfter-proof-of-concept.xcarchive -destination 'generic/platform=iOS' CODE_SIGN_STYLE=Manual PROVISIONING_PROFILE_SPECIFIER="Geniart - Ad Hoc"
           xcodebuild -exportArchive -archivePath $RUNNER_TEMP/BeforeAfter-proof-of-concept.xcarchive -exportOptionsPlist $EXPORT_PLIST_PATH -exportPath $RUNNER_TEMP/export  
       
+  upload_to_appcenter:
+    needs: build_ios
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download IPA
+        uses: actions/download-artifact@v3
+        with:
+          name: ios-app
+
       - name: Upload to App Center
         uses: wzieba/AppCenter-Github-Action@v1
         with:
           appName: ${{ secrets.APPCENTER_APP_NAME }}
           token: ${{ secrets.APPCENTER_API_TOKEN }}
           group: Collaborators
-          file: ${{runner.temp}}/export/BeforeAfter-proof-of-concept.ipa
+          file: BeforeAfter-proof-of-concept.ipa
           notifyTesters: true
           debug: false
