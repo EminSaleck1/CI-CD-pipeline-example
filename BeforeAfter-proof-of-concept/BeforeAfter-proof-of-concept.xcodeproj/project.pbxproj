@@ -13,6 +13,7 @@
 		AC1E75132C5386830037BFDB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC1E75122C5386830037BFDB /* Preview Assets.xcassets */; };
 		AC1E751A2C53A2610037BFDB /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1E75192C53A2610037BFDB /* Item.swift */; };
 		AC1E751C2C53A27F0037BFDB /* DetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1E751B2C53A27F0037BFDB /* DetailsView.swift */; };
+		AC85A00E2C57A927005B782F /* ExportOptions.plist in Resources */ = {isa = PBXBuildFile; fileRef = AC85A00D2C57A927005B782F /* ExportOptions.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		AC1E75122C5386830037BFDB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		AC1E75192C53A2610037BFDB /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		AC1E751B2C53A27F0037BFDB /* DetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsView.swift; sourceTree = "<group>"; };
+		AC85A00D2C57A927005B782F /* ExportOptions.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ExportOptions.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				AC1E750B2C5386830037BFDB /* BeforeAfter_proof_of_conceptApp.swift */,
+				AC85A00D2C57A927005B782F /* ExportOptions.plist */,
 				AC1E750D2C5386830037BFDB /* ContentView.swift */,
 				AC1E750F2C5386830037BFDB /* Assets.xcassets */,
 				AC1E75112C5386830037BFDB /* Preview Content */,
@@ -133,6 +136,7 @@
 			files = (
 				AC1E75132C5386830037BFDB /* Preview Assets.xcassets in Resources */,
 				AC1E75102C5386830037BFDB /* Assets.xcassets in Resources */,
+				AC85A00E2C57A927005B782F /* ExportOptions.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,10 +281,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BeforeAfter-proof-of-concept/Preview Content\"";
-				DEVELOPMENT_TEAM = 975T2KP2L3;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 975T2KP2L3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -296,6 +302,8 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.valthsolutions.videoai-dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Geniart - Ad Hoc";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -307,10 +315,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BeforeAfter-proof-of-concept/Preview Content\"";
-				DEVELOPMENT_TEAM = 975T2KP2L3;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 975T2KP2L3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -326,6 +336,8 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.valthsolutions.videoai-dev";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Geniart - Ad Hoc";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
