@@ -50,3 +50,12 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+          - name: BUILD archive
+          - run: 
+          xcodebuild -scheme "BeforeAfter-proof-of-concept" \
+          archivePath $RUNNER_TEMP/BeforeAfter-proof-of-concept.xcarchive \
+          sdk iphoneos \
+          configuration Debug \
+          destination generic/platform=IOS \
+          clean archive
