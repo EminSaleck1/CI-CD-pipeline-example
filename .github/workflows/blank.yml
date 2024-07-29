@@ -80,6 +80,6 @@ jobs:
           appName: ${{ secrets.APPCENTER_APP_NAME }}
           token: ${{ secrets.APPCENTER_API_TOKEN }}
           group: Collaborators
-          file: ${{runner.temp}}/export/BeforeAfter_proof_of_concept.ipa
+          file: ${{runner.temp}}/export/BeforeAfter-proof-of-concept.ipa
           notifyTesters: true
           debug: false
