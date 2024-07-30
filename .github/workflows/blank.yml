@@ -72,7 +72,7 @@ jobs:
             defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
             EXPORT_PLIST_PATH=$RUNNER_TEMP/exportOptions.plist
             echo -n "$EXPORT_PLIST" | base64 --decode --output $EXPORT_PLIST_PATH
-            xcodebuild clean archive -project BeforeAfter-proof-of-concept/BeforeAfter-proof-of-concept.xcodeproj -scheme "BeforeAfter-proof-of-concept" -archivePath $RUNNER_TEMP/BeforeAfter-proof-of-concept.xcarchive -destination 'generic/platform=iOS' CODE_SIGN_STYLE=Manual PROVISIONING_PROFILE_SPECIFIER="Geniart - Ad Hoc" OTHER_SWIFT_FLAGS="-skipMacroValidation"
+            xcodebuild clean archive -project BeforeAfter-proof-of-concept/BeforeAfter-proof-of-concept.xcodeproj -scheme "BeforeAfter-proof-of-concept" -archivePath $RUNNER_TEMP/BeforeAfter-proof-of-concept.xcarchive -destination 'generic/platform=iOS' CODE_SIGN_STYLE=Manual PROVISIONING_PROFILE_SPECIFIER="Geniart - Ad Hoc"
             xcodebuild -skipMacroValidation -exportArchive -archivePath $RUNNER_TEMP/BeforeAfter-proof-of-concept.xcarchive -exportOptionsPlist $EXPORT_PLIST_PATH -exportPath $RUNNER_TEMP/export
       - name: Upload IPA
         uses: actions/upload-artifact@v2
