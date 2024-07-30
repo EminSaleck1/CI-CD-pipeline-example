@@ -73,11 +73,21 @@ jobs:
           echo -n "$EXPORT_PLIST" | base64 --decode --output $EXPORT_PLIST_PATH
           xcodebuild clean archive -project BeforeAfter-proof-of-concept/BeforeAfter-proof-of-concept.xcodeproj -scheme "BeforeAfter-proof-of-concept" -archivePath $RUNNER_TEMP/BeforeAfter-proof-of-concept.xcarchive -destination 'generic/platform=iOS' CODE_SIGN_STYLE=Manual PROVISIONING_PROFILE_SPECIFIER="Geniart - Ad Hoc"
           xcodebuild -exportArchive -archivePath $RUNNER_TEMP/BeforeAfter-proof-of-concept.xcarchive -exportOptionsPlist $EXPORT_PLIST_PATH -exportPath $RUNNER_TEMP/export  
+      - name: Upload IPA
+        uses: actions/upload-artifact@v2
+        with:
+          name: ipa-file
+          path: ${{ runner.temp }}/export/BeforeAfter-proof-of-concept.ipa
       
   upload_to_appcenter:
     needs: build_ios
     runs-on: ubuntu-latest
     steps:
+
+    - name: Download IPA
+      uses: actions/download-artifact@v2
+      with:
+        name: ipa-file
 
     - name: App Center Distribute
       uses: devussy/AppCenter-Distribute-Github-Action@v3.0.0
@@ -85,6 +95,6 @@ jobs:
           appName: EminSaleck1/CI-CD-pipeline-example
           token: ${{ secrets.APPCENTER_API_TOKEN }}
           group: Internal
-          file: $RUNNER_TEMP/export/BeforeAfter-proof-of-concept.ipa
+          file: BeforeAfter-proof-of-concept.ipa
           notifyTesters: true
           debug: true
