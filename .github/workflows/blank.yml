@@ -1,13 +1,13 @@
+
 name: Example
 
 on:
-  # Triggers the workflow on push request events but only for the "develop" branch
+  # Triggers
   push:
     branches: [ "develop" ]
 
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build_ios:
     runs-on: macos-latest
@@ -55,6 +55,12 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
          xcode-version: 15.3.0
+
+      - name: Decode Xcode config
+        env:
+          XCODE_CONFIG: ${{ secrets.XCODE_CONFIG }}
+        run: |
+          echo -n "$XCODE_CONFIG" | base64 --decode --output VideoAI/Config.xcconfig
         
       - name: Build and export IPA
         env:
@@ -62,13 +68,13 @@ jobs:
         run: |
             EXPORT_PLIST_PATH=$RUNNER_TEMP/exportOptions.plist
             echo -n "$EXPORT_PLIST" | base64 --decode --output $EXPORT_PLIST_PATH
-            xcodebuild -skipMacroValidation clean archive -project BeforeAfter-proof-of-concept/BeforeAfter-proof-of-concept.xcodeproj -scheme "BeforeAfter-proof-of-concept" -archivePath $RUNNER_TEMP/BeforeAfter-proof-of-concept.xcarchive -destination 'generic/platform=iOS' CODE_SIGN_STYLE=Manual PROVISIONING_PROFILE_SPECIFIER="Geniart - Ad Hoc" -verbose
-            xcodebuild -skipMacroValidation -exportArchive -archivePath $RUNNER_TEMP/BeforeAfter-proof-of-concept.xcarchive -exportOptionsPlist $EXPORT_PLIST_PATH -exportPath $RUNNER_TEMP/export
+            xcodebuild -skipMacroValidation clean archive -project VideoAI/VideoAI.xcodeproj -scheme "DEBUG" -archivePath $RUNNER_TEMP/VideoAI.xcarchive -destination 'generic/platform=iOS' CODE_SIGN_STYLE=Manual PROVISIONING_PROFILE_SPECIFIER="Geniart - Ad Hoc" -verbose
+            xcodebuild -skipMacroValidation -exportArchive -archivePath $RUNNER_TEMP/VideoAI.xcarchive -exportOptionsPlist $EXPORT_PLIST_PATH -exportPath $RUNNER_TEMP/export
       - name: Upload IPA
         uses: actions/upload-artifact@v2
         with:
           name: ipa-file
-          path: ${{ runner.temp }}/export/BeforeAfter-proof-of-concept.ipa
+          path: ${{ runner.temp }}/export/VideoAI.ipa
       
   upload_to_appcenter:
     needs: build_ios
@@ -86,6 +92,77 @@ jobs:
           appName: Polytech/VideoAI
           token: ${{ secrets.APPCENTER_API_TOKEN }}
           group: Internal
-          file: BeforeAfter-proof-of-concept.ipa
+          file: VideoAI.ipa
           notifyTesters: true
           debug: true
+          
+  upload_to_browserstack:
+    needs: upload_to_appcenter
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download IPA
+      uses: actions/download-artifact@v2
+      with:
+        name: ipa-file
+
+    - name: Upload to BrowserStack
+      env:
+        BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+        BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      run: |
+        curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_ACCESS_KEY" \
+             -X POST "https://api-cloud.browserstack.com/app-automate/upload" \
+             -F "file=@VideoAI.ipa" \
+             -F "custom_id=VideoAI_${{ github.sha }}"
+
+  update_jira:
+    needs: upload_to_appcenter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+
+      - name: Get commit message
+        id: get_commit_message
+        run: echo "::set-output name=message::$(git log --format=%B -n 1 ${{ github.sha }})"
+
+      - name: Login to Jira
+        uses: atlassian/gajira-login@v3
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+      - name: Find Jira issue in commit message
+        id: find_issue
+        uses: atlassian/gajira-find-issue-key@v3
+        with:
+          string: ${{ steps.get_commit_message.outputs.message }}
+
+      - name: Update Jira issue
+        if: steps.find_issue.outputs.issue
+        uses: atlassian/gajira-transition@v3
+        with:
+          issue: ${{ steps.find_issue.outputs.issue }}
+          transition: "QA"
+
+      - name: Add comment to Jira issue
+        if: steps.find_issue.outputs.issue
+        uses: atlassian/gajira-comment@v3
+        with:
+          issue: ${{ steps.find_issue.outputs.issue }}
+          comment: |
+            A new iOS build has been uploaded to App Center.
+            Branch: ${{ github.ref }}
+            Commit: ${{ github.sha }}
+            [View in App Center](https://appcenter.ms/orgs/Polytech/apps/VideoAI)
+
+      - name: Log updated issue
+        if: steps.find_issue.outputs.issue
+        run: echo "Updated issue ${{ steps.find_issue.outputs.issue }}"
+
+      - name: Log if no issue found
+        if: steps.find_issue.outputs.issue == ''
+        run: echo "No Jira issue found in commit message"
