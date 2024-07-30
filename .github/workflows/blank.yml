@@ -85,6 +85,6 @@ jobs:
           appName: EminSaleck1/CI-CD-pipeline-example
           token: ${{ secrets.APPCENTER_API_TOKEN }}
           group: Internal
-          file: BeforeAfter-proof-of-concept.ipa
+          file: $RUNNER_TEMP/export/BeforeAfter-proof-of-concept.ipa
           notifyTesters: true
           debug: true
