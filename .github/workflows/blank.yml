@@ -82,7 +82,7 @@ jobs:
     - name: App Center Distribute
       uses: devussy/AppCenter-Distribute-Github-Action@v3.0.0
       with:
-          appName: VideoAI
+          appName: EminSaleck1/CI-CD-pipeline-example
           token: ${{ secrets.APPCENTER_API_TOKEN }}
           group: Internal
           file: BeforeAfter-proof-of-concept.ipa
